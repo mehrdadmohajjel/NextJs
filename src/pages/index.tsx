@@ -1,5 +1,7 @@
 import Link from 'next/link';
 import {Router, useRouter} from 'next/router';
+import React from 'react';
+import {useEffect} from 'react';
 const Home = () => {
   const news = [
     {
@@ -24,9 +26,15 @@ const Home = () => {
     },
   ];
   const router = useRouter();
+  const [selectedId, setSelectedId] = React.useState<number>(0);
+
+  useEffect(() => {
+    setSelectedId(Number(router.query.id));
+  }, [router.query]);
   const handleClick = (id: number) => {
     if (id % 2 == 0) {
-      router.push(`/news/${id}`);
+      // router.push(`/news/${id}`);
+      router.push(`/news/?id=${id}`, undefined, {shallow: true});
     } else {
       alert('xxxx');
     }
@@ -46,7 +54,26 @@ const Home = () => {
               {/* <Link href={`/news/${item.id}`}>
                 <span>{item.title}</span>
               </Link> */}
-              <button onClick={() => handleClick(item.id)}>
+
+              {/* {
+                <Link
+                  onClickCapture={() => handleClick(item.id)}
+                  href={`/news/${item.id}`}
+                  style={{
+                    backgroundColor: selectedId === item.id ? 'red' : 'white',
+                  }}
+                  onClick={() => handleClick(item.id)}
+                >
+                  <span>{item.title}</span>
+                </Link>
+              } */}
+
+              <button
+                style={{
+                  backgroundColor: selectedId === item.id ? 'red' : 'white',
+                }}
+                onClick={() => handleClick(item.id)}
+              >
                 <span>{item.title}</span>
               </button>
             </li>
